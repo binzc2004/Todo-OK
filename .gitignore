@@ -1,0 +1,89 @@
+# ========================
+# Flutter / Dart
+# ========================
+.dart_tool/
+.packages
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Generated files
+*.lock
+pubspec.lock
+
+# ========================
+# Android
+# ========================
+android/.gradle/
+android/app/build/
+android/build/
+
+# Keystore（非常重要，不能上传）
+android/key.properties
+*.jks
+*.keystore
+
+# Local config
+android/local.properties
+
+# ========================
+# iOS（如果以后支持）
+# ========================
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# ========================
+# macOS / Linux
+# ========================
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# ========================
+# Windows
+# ========================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ========================
+# VSCode
+# ========================
+.vscode/
+
+# ========================
+# IntelliJ / Android Studio
+# ========================
+.idea/
+*.iml
+
+# ========================
+# Misc
+# ========================
+*.class
+*.pyc
+*.o
+*.exe
+*.dll
+
+# ========================
+# Coverage
+# ========================
+coverage/
+
+# ========================
+# Firebase / Secrets（如果有）
+# ========================
+google-services.json
+GoogleService-Info.plist
+.env
+
+# ========================
+# 自定义（你可以加）
+# ========================
+docs/*.pdf
+docs/*.docx
