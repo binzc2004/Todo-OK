@@ -1,4 +1,4 @@
-# demo
+# selfdiscipline
 
 A new Flutter project.
 

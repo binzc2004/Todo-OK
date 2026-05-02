@@ -12,10 +12,10 @@ Future<void> main() async {
 
   /// dev模式清理
   if (AppConfig.devMode) {
-    final sp = await SharedPreferences.getInstance();
-    await sp.clear();
-    await AppDatabase.instance.reset();
-    await AppDatabase.instance.seedFakeData();
+    // final sp = await SharedPreferences.getInstance();
+    // await sp.clear();
+    // await AppDatabase.instance.reset();
+    // await AppDatabase.instance.seedFakeData();
   }
 
   /// DB

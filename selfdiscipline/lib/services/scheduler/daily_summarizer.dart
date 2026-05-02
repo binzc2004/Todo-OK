@@ -113,6 +113,7 @@ class DailySummarizer {
     final delay = AppConfig.devMode
         ? const Duration(minutes: 5)
         : _calcNext2359();
+        await NotificationService.show(id: -1,title: "24准时任务",body: "启动");
     await WorkManagerService.registerOneOff(
       uniqueName: "daily_summary_2359",
       taskName: "daily_summarizer",

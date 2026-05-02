@@ -143,7 +143,7 @@ class AppDatabase {
         'total': 1,
         'finished': 1,
         'skipped': 0,
-        'completion_rate': 0.0, // ✅ 100%
+        'completion_rate': 1.0, // ✅ 100%
       });
     }
 

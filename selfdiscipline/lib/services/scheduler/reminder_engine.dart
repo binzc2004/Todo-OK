@@ -20,6 +20,11 @@ class ReminderEngine {
     Log.d(
       "🟢 RuleEngine START task=${task.id} delay=${delay.inMinutes}min taskName=${task.name}",
     );
+    await NotificationService.show(
+      id: task.id ?? -1,
+      title: task.name,
+      body: "启动",
+    );
 
     await WorkManagerService.registerOneOff(
       uniqueName: _key(task.id!),
@@ -51,6 +56,11 @@ class ReminderEngine {
 
     if (!(await _shouldContinue(task, count))) {
       Log.d("⛔ STOP task=${task.id}");
+      await NotificationService.show(
+        id: task.id ?? -1,
+        title: task.name,
+        body: "${task.name}已完成，干的不错哦，再接再厉吧",
+      );
       return;
     }
 

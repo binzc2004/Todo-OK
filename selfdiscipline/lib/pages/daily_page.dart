@@ -1,4 +1,4 @@
-import 'package:demo/services/task_service.dart';
+import 'package:selfdiscipline/services/task_service.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/log.dart';
@@ -35,7 +35,7 @@ class _DailyPageState extends State<DailyPage> {
   // 🔄 全量刷新
   // =========================
   Future<void> refreshData() async {
-    _generator.refreshDailyTasks();
+    TaskGenerator.refreshDailyTasks();
 
     final data = await _service.getByDate(today);
 

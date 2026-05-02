@@ -15,7 +15,7 @@ void callbackDispatcher() {
 
     try {
       if (task == "generate_daily_task") {
-        await TaskGenerator().generateDailyTasks();
+        await TaskGenerator.generateDailyTasks();
       } else if (task == "daily_summarizer") {
         await DailySummarizer().summarizeToday(inputData);
       } else if (task == "reminder_task") {

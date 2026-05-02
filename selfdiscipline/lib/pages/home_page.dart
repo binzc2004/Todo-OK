@@ -10,6 +10,8 @@ import '../services/startupcheck/startup_checker.dart';
 import '../services/startupcheck/permission_checker.dart';
 import '../services/auth/auth_manager.dart';
 import '../workers/work_manager.dart';
+import '../utils/log.dart';
+import '../services/notification/notification_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -62,9 +64,11 @@ class _HomePageState extends State<HomePage> {
     /// 2️⃣ 启动任务系统
     await TaskGenerator.start();
     await DailySummarizer.start();
+    Log.d("登录启动！！！");
+    NotificationService.show(id: -1, title: "启动", body: "所有后台任务已启动");
 
     /// 3️⃣ startup check
-    WidgetsBinding.instance.addPostFrameCallback((_)async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await StartupPermissionDialog.checkAndShow(context);
       await StartupChecker.check(context);
     });
@@ -78,6 +82,8 @@ class _HomePageState extends State<HomePage> {
     await TaskGenerator.stop();
     await DailySummarizer.stop();
     await WorkManagerService.cancelAll();
+    Log.d("登出，停止后台任务");
+    NotificationService.show(id: -1, title: "停止", body: "后台任务已杀死！");
 
     /// 2️⃣ 更新UI状态
     setState(() {

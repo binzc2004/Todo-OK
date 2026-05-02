@@ -1,4 +1,3 @@
-
 import '../../dao/task_dao.dart';
 import '../../dao/daily_task_dao.dart';
 import '../../utils/date_utils.dart';
@@ -9,11 +8,12 @@ import '../../workers/work_manager.dart';
 import '../../utils/log.dart';
 import 'reminder_engine.dart';
 import '../../config/app_config.dart';
+import '../../const/Type.dart';
 
 class TaskGenerator {
-  final taskDao = TaskDao();
-  final dailyDao = DailyTaskDao();
-  Future<void> refreshDailyTasks() async {
+  static final taskDao = TaskDao();
+  static final dailyDao = DailyTaskDao();
+  static Future<void> refreshDailyTasks() async {
     final today = DateUtilsHelper.format(DateTime.now());
     final exists = await dailyDao.getByDate(today);
     final tasks = await taskDao.getAllTasks();
@@ -32,31 +32,16 @@ class TaskGenerator {
     }
   }
 
-  Future<void> generateDailyTasks({bool force = false}) async {
-
+  static Future<void> generateDailyTasks({bool force = false}) async {
     await refreshDailyTasks();
-
-    await NotificationService.show(
-      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title: "每日任务刷新完成",
-      body: "今日任务已刷新，快去自律坚持吧",
-    );
-
     await startTodayTasks();
-
-    await NotificationService.show(
-      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title: "每日任务开始提醒",
-      body: "今日任务已开启提醒，随时准备接受监督吧！",
-    );
-
     await _scheduleNext8AM();
   }
 
   /// =========================
   /// 🚀 启动今日任务调度（核心新增）
   /// =========================
-  Future<void> startTodayTasks() async {
+  static Future<void> startTodayTasks() async {
     Log.d("🚀 启动今日任务调度");
     final today = DateUtilsHelper.today();
 
@@ -71,9 +56,11 @@ class TaskGenerator {
 
     /// 3️⃣ 启动 reminder_engine
     for (final daily in dailyTasks) {
-      final task = taskMap[daily.taskId];
-      if (task == null) continue;
-      ReminderEngine.start(task);
+      if (daily.status == DoType.todo) {
+        final task = taskMap[daily.taskId];
+        if (task == null) continue;
+        ReminderEngine.start(task);
+      }
     }
   }
 
@@ -85,6 +72,8 @@ class TaskGenerator {
     final delay = AppConfig.devMode
         ? const Duration(seconds: 1)
         : _calcNext8AM();
+    await startTodayTasks();
+    await NotificationService.show(id: -1, title: "8点定时任务", body: "启动");
     await WorkManagerService.registerOneOff(
       uniqueName: "daily_task_8am",
       taskName: "generate_daily_task",
@@ -95,7 +84,7 @@ class TaskGenerator {
   /// =========================
   /// 🔁 注册下一次（防重复）
   /// =========================
-  Future<void> _scheduleNext8AM() async {
+  static Future<void> _scheduleNext8AM() async {
     await WorkManagerService.registerOneOff(
       uniqueName: "daily_task_8am",
       taskName: "generate_daily_task",
