@@ -54,9 +54,9 @@ class NotificationService {
     );
   }
 
+  static final Random _random = Random();
+
   static int _generateId() {
-    final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    final rand = Random().nextInt(1000); // 0~999
-    return now * 1000 + rand;
+    return _random.nextInt(1000000000) + 1; // 1 ~ 1,000,000,000
   }
 }
