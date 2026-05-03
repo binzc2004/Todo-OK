@@ -74,7 +74,6 @@ class TaskGenerator {
         : _calcNext8AM();
     await startTodayTasks();
     await NotificationService.show(
-      id: -1,
       title: "8点定时任务",
       body: "启动，下次提醒时间${delay.inMinutes} min"
     );

@@ -20,7 +20,6 @@ class DailySummarizer {
   Future<void> summarizeToday([Map<String, dynamic>? data]) async {
     _stopTodayReminders();
     await NotificationService.show(
-      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title: "今日任务停止调度",
       body: "今天的督促结束了，你有完成多少呢？",
     );
@@ -56,14 +55,12 @@ class DailySummarizer {
 
     /// 🔔 通知
     await NotificationService.show(
-      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title: "统计完成",
       body: "今日完成率 ${(rate * 100).toStringAsFixed(0)}%",
     );
 
     await _stopTodayReminders();
     await NotificationService.show(
-      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title: "今日任务停止调度",
       body: "今天的督促结束了，你有完成多少呢？",
     );
@@ -120,7 +117,6 @@ class DailySummarizer {
         ? const Duration(minutes: 5)
         : _calcNext2359();
     await NotificationService.show(
-      id: -1,
       title: "24准时任务",
       body: "启动，下次提醒时间${delay.inMinutes} min",
     );

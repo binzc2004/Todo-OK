@@ -64,7 +64,6 @@ class TestTask {
   /// =========================
   Future<void> _execute(int count) async {
     await NotificationService.show(
-      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title: "TEST TASK",
       body: "第 ${count + 1} 次提醒 ⏱",
     );

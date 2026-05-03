@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     await TaskGenerator.start();
     await DailySummarizer.start();
     Log.d("登录启动！！！");
-    NotificationService.show(id: -1, title: "启动", body: "所有后台任务已启动");
+    NotificationService.show(title: "启动", body: "所有后台任务已启动");
 
     /// 3️⃣ startup check
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
     await DailySummarizer.stop();
     await WorkManagerService.cancelAll();
     Log.d("登出，停止后台任务");
-    NotificationService.show(id: -1, title: "停止", body: "后台任务已杀死！");
+    NotificationService.show(title: "停止", body: "后台任务已杀死！");
 
     /// 2️⃣ 更新UI状态
     setState(() {

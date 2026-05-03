@@ -2,6 +2,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../utils/log.dart';
 import 'vibration_service.dart';
 import 'sound_service.dart';
+
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -26,11 +27,7 @@ class NotificationService {
   }
 
   /// 发送通知（✔ 正确版本）
-  static Future<void> show({
-    required int id,
-    String? title,
-    String? body,
-  }) async {
+  static Future<void> show({String? title, String? body}) async {
     const androidDetails = AndroidNotificationDetails(
       'todo_channel',
       'Todo Notifications',
@@ -48,10 +45,14 @@ class NotificationService {
     );
 
     await _plugin.show(
-      id: id,
+      id: _generateId(),
       title: title,
       body: body,
       notificationDetails: details,
     );
+  }
+
+  static int _generateId() {
+    return DateTime.now().millisecondsSinceEpoch ~/ 1000;
   }
 }

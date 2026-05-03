@@ -21,7 +21,6 @@ class ReminderEngine {
       "🟢 RuleEngine START task=${task.id} delay=${delay.inMinutes}min taskName=${task.name}",
     );
     await NotificationService.show(
-      id: task.id ?? -1,
       title: task.name,
       body: "启动，下次提醒时间${delay.inMinutes} min",
     );
@@ -57,7 +56,6 @@ class ReminderEngine {
     if (!(await _shouldContinue(task, count))) {
       Log.d("⛔ STOP task=${task.id}");
       await NotificationService.show(
-        id: task.id ?? -1,
         title: task.name,
         body: "${task.name}已完成，干的不错哦，再接再厉吧",
       );
@@ -84,7 +82,6 @@ class ReminderEngine {
   /// =========================
   Future<void> _execute(Task task, int count) async {
     await NotificationService.show(
-      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title: task.name,
       body: "第 ${count + 1} 次提醒 🚀",
     );
