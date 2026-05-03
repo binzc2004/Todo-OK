@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class RuleType {
   static const weekly = 0; // 周几
   static const oddEven = 1; // 单双日
@@ -6,7 +7,7 @@ class RuleType {
 }
 
 class DoType {
-  static const int todo = 0; // 未完成
+  static const int todo = 0; // 未选择
   static const int done = 1; // 已完成
   static const int skipped = 2; // 跳过（偷懒😏）
 
@@ -14,12 +15,12 @@ class DoType {
   static String toText(int type) {
     switch (type) {
       case done:
-        return "完成";
+        return "完成✅";
       case skipped:
-        return "偷懒";
+        return "偷懒😏";
       case todo:
       default:
-        return "未完成";
+        return "未选择状态";
     }
   }
 

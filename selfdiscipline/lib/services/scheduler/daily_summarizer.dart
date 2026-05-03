@@ -8,6 +8,8 @@ import '../../workers/work_manager.dart';
 import '../../utils/log.dart';
 import 'reminder_engine.dart';
 import '../../config/app_config.dart';
+import '../../const/Type.dart';
+
 class DailySummarizer {
   final _dailyDao = DailyTaskDao();
   final _statsDao = StatsDao();
@@ -33,8 +35,8 @@ class DailySummarizer {
       return;
     }
     final total = tasks.length;
-    final finished = tasks.where((t) => t.status == 1).length;
-    final skipped = tasks.where((t) => t.status == 2).length;
+    final finished = tasks.where((t) => t.status == DoType.done).length;
+    final skipped = tasks.where((t) => t.status == DoType.skipped).length;
     final rate = total == 0 ? 0.0 : finished / total;
 
     /// 🔥 更新 streak（更严谨版本）
@@ -65,6 +67,7 @@ class DailySummarizer {
       title: "今日任务停止调度",
       body: "今天的督促结束了，你有完成多少呢？",
     );
+
     /// 🔁 明天23:59继续
     await _scheduleNext2359();
   }
@@ -90,14 +93,17 @@ class DailySummarizer {
   Future<void> _stopTodayReminders() async {
     final today = DateUtilsHelper.today();
     Log.d("⛔ 开始停止今日所有 reminder");
+
     /// 1️⃣ 查今日任务
     final tasks = await _dailyDao.getByDate(today);
     if (tasks.isEmpty) {
       Log.d("⚠️ 今日无任务，无需停止");
       return;
     }
+
     /// 2️⃣ 去重 taskId（防止重复 stop）
     final taskIds = tasks.map((e) => e.taskId).toSet();
+
     /// 3️⃣ 批量停止
     for (final taskId in taskIds) {
       await ReminderEngine.stop(taskId);
@@ -113,7 +119,11 @@ class DailySummarizer {
     final delay = AppConfig.devMode
         ? const Duration(minutes: 5)
         : _calcNext2359();
-        await NotificationService.show(id: -1,title: "24准时任务",body: "启动");
+    await NotificationService.show(
+      id: -1,
+      title: "24准时任务",
+      body: "启动，下次提醒时间${delay.inMinutes} min",
+    );
     await WorkManagerService.registerOneOff(
       uniqueName: "daily_summary_2359",
       taskName: "daily_summarizer",

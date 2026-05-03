@@ -79,32 +79,4 @@ class StatsService {
 
     await _dao.upsertStats(stats);
   }
-
-  /// =========================
-  /// 📌 增加完成任务（常用）
-  /// =========================
-  Future<void> addFinished(String date) async {
-    final old = await getDayStats(date);
-
-    await updateStats(
-      date: date,
-      total: old.total + 1,
-      finished: old.finished + 1,
-      skipped: old.skipped,
-    );
-  }
-
-  /// =========================
-  /// 📌 增加未完成/跳过任务
-  /// =========================
-  Future<void> addSkipped(String date) async {
-    final old = await getDayStats(date);
-
-    await updateStats(
-      date: date,
-      total: old.total + 1,
-      finished: old.finished,
-      skipped: old.skipped + 1,
-    );
-  }
 }

@@ -6,7 +6,7 @@ import '../../workers/work_manager.dart';
 import '../../utils/log.dart';
 import '../daily_task_service.dart';
 import '../../config/app_config.dart';
-
+import 'dart:math';
 class ReminderEngine {
   final DailyTaskService _dailyTaskService = DailyTaskService();
 
@@ -23,7 +23,7 @@ class ReminderEngine {
     await NotificationService.show(
       id: task.id ?? -1,
       title: task.name,
-      body: "启动",
+      body: "启动，下次提醒时间${delay.inMinutes} min",
     );
 
     await WorkManagerService.registerOneOff(
@@ -124,7 +124,7 @@ class ReminderEngine {
   static Duration _calcInitialDelay(String? timeOfDay) {
     final now = DateTime.now();
 
-    /// 立即执行
+    // 立即执行
     if (timeOfDay == null || timeOfDay.isEmpty || timeOfDay == "0") {
       return const Duration(seconds: 1);
     }
@@ -142,11 +142,13 @@ class ReminderEngine {
       int.parse(parts[1]),
     );
 
-    final real = target.isBefore(now)
-        ? target.add(const Duration(days: 1))
-        : target;
+    // 如果目标时间已经过去，直接返回1秒
+    if (target.isBefore(now)) {
+      final randomSeconds = Random().nextInt(20) + 1; // 1~20
+      return Duration(seconds: randomSeconds);
+    }
 
-    return real.difference(now);
+    return target.difference(now);
   }
 
   /// =========================
