@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../utils/log.dart';
 import 'vibration_service.dart';
@@ -53,6 +55,8 @@ class NotificationService {
   }
 
   static int _generateId() {
-    return DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    final rand = Random().nextInt(1000); // 0~999
+    return now * 1000 + rand;
   }
 }
